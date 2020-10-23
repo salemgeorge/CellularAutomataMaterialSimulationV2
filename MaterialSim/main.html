@@ -1,0 +1,40 @@
+<meta charset="UTF-8">
+
+<style>
+    canvas {
+        border: 2px solid black;
+        border-radius: 5px;
+        margin: 5px;
+        display: flex;
+    }
+
+    .buttonClass {
+        color: white;
+        background-color: black;
+        border: 2px solid slateblue;
+        box-shadow: 0 8px slategray;
+        border-radius: 8px;
+        outline: none;
+        transition-duration: .1s;
+        padding: 10px;
+        margin-left: 510px;
+        margin-top: -68px;
+    }
+
+    .buttonClass:hover {
+        border: 2px solid lightgray;
+    }
+
+    .buttonClass:active {
+    box-shadow: 0 2px slategray;
+    transform: translateY(7px);
+}
+</style>
+
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<button id="toggleBitDragSpawn" class="buttonClass">Toggle Dragging Spawn</button>
+
+<script src="src/BitBase.js"></script>
+<script src="src/BitManager.js"></script>
+<script src="src/GameLoop.js"></script>
