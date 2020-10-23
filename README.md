@@ -1,2 +1,2 @@
 # CellularAutomataMaterialSimulationV2
-The last system sucked, but not this one. v2 will feature a component driven system, so that it is extremely easy to create new materials.
+So far, I haven't done much. I've barely gotten collisions to work, however I do have some plans for the future!
