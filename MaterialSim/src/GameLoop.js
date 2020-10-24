@@ -23,7 +23,8 @@ function init() {
     let modifiers = {
         HAS_GRAVITY: true,
         WEIGHT: 50,
-        COLOR: '#FFC300'
+        COLOR: '#FFC300',
+        IS_SAND: true
     }
     let testBit = new BitBase(0, 0, modifiers)
     bitManager.SpawnBit(1, 1, testBit)

@@ -105,19 +105,31 @@ class BitBase {
         let y = this.y
         let dirMoved = {x, y, didMove: false}
 
-        // dirMoved = this.ApplyXVelocity(dirMoved, mods, this.xVel)
-        // dirMoved = this.ApplyYVelocity(dirMoved, mods, this.yVel)
-
         if(this.xVel > 0) {
+            //mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE
+            if(true) {
+                mods.CURRENT_UPDATE_PROGRESS = 0;
+
+                this.modifiers = mods
+
+                if(x < 99 && !this.GetBit(x + 1, y)) {
+                    this.MoveSelf(this.direction.RIGHT)
+                    this.xVel--;
+                    dirMoved.x++;
+
+                    console.log('applied vel')
+                }
+            }
+        } else if(this.xVel < 0) {
             if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
                 mods.CURRENT_UPDATE_PROGRESS = 0;
 
                 this.modifiers = mods
 
-                if(x < 99 && this.GetBit(x + 1, y) == null) {
-                    this.MoveSelf(this.direction.RIGHT)
-                    this.xVel--;
-                    dirMoved.x++;
+                if(x > 0 && this.GetBit(x - 1, y) == null) {
+                    this.MoveSelf(this.direction.LEFT)
+                    this.xVel++;
+                    dirMoved.x--;
                 }
             }
         }
@@ -134,6 +146,18 @@ class BitBase {
                     dirMoved.y--;
                 }
             }
+        } else if(this.yVel > 0) {
+            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
+                mods.CURRENT_UPDATE_PROGRESS = 0;
+
+                this.modifiers = mods
+
+                if(y < 99 && this.GetBit(x, y + 1) == null) {
+                    this.MoveSelf(this.direction.DOWN)
+                    this.yVel--;
+                    dirMoved.y++;
+                }
+            }
         }
 
         return dirMoved;
@@ -146,5 +170,20 @@ class BitBase {
 
     GetBit(x, y) {
         return grid[x][y]
+    }
+
+    HandleSandPhysics() {
+        let mods = this.modifiers
+        let x = this.x
+        let y = this.y
+        let dirMoved = {x, y, didMove: false}
+        let bitBelow = this.GetBit(x, y + 1)
+
+        if(y < 99 && bitBelow) {
+            let bitRight = this.GetBit(x + 3, y + 1)
+            if(!bitRight) {
+                this.AddVelocity(3, 0)
+            }
+        }
     }
 }

@@ -15,16 +15,15 @@ class BitManager {
                 let bitToUpdate = grid[x][y]
                 let bitPos = {x, y, didMove: null}
                 let bitBelow = this.GetBit(x, y + 1) 
-                
+
                 bitPos = grid[bitPos.x][bitPos.y].ApplyVelocity()
 
-                if(!bitBelow) {
-                    if(bitToUpdate.modifiers.HAS_GRAVITY) {
-                        bitPos = grid[bitPos.x][bitPos.y].ApplyGravity()
-                        if(bitPos.didMove) grid[x][y] = null
-                    }
-                } else {
-                    grid[bitPos.x][bitPos.y].AddVelocity(0, -5)
+                if(bitToUpdate.modifiers.HAS_GRAVITY && !bitBelow) {
+                    bitPos = grid[bitPos.x][bitPos.y].ApplyGravity()
+                    if(bitPos.didMove) grid[x][y] = null
+                }
+                if(bitToUpdate.modifiers.IS_SAND) {
+                    grid[bitPos.x][bitPos.y].HandleSandPhysics()
                 }
 
                 grid[bitPos.x][bitPos.y].DrawSelf(ctx)
