@@ -18,16 +18,24 @@ class BitManager {
 
                 bitPos = grid[bitPos.x][bitPos.y].ApplyVelocity()
 
-                if(bitToUpdate.modifiers.HAS_GRAVITY && !bitBelow) {
-                    bitPos = grid[bitPos.x][bitPos.y].ApplyGravity()
-                    if(bitPos.didMove) grid[x][y] = null
+                if(bitToUpdate.modifiers.HAS_GRAVITY) {
+                    if(!bitBelow && grid[bitPos.x][bitPos.y]) {
+                        bitPos = grid[bitPos.x][bitPos.y].ApplyGravity()
+                        grid[bitPos.x][bitPos.y].modifiers.IS_FALLING = true
+                        if(bitPos.didMove) grid[x][y] = null
+                    } else {
+                        if(grid[bitPos.x][bitPos.y])
+                            grid[bitPos.x][bitPos.y].modifiers.IS_FALLING = false
+                    }
                 }
                 if(bitToUpdate.modifiers.IS_SAND) {
-                    grid[bitPos.x][bitPos.y].HandleSandPhysics()
+                    if(grid[bitPos.x][bitPos.y])
+                        grid[bitPos.x][bitPos.y].HandleSandPhysics()
                 }
 
-                grid[bitPos.x][bitPos.y].DrawSelf(ctx)
-
+                if(grid[bitPos.x][bitPos.y]) {
+                    grid[bitPos.x][bitPos.y].DrawSelf(ctx)
+                }
             }
         }
     }

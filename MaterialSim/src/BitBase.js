@@ -15,10 +15,14 @@ class BitBase {
         Object.defineProperties(this.modifiers, {
             UPDATE_PROGRESS_TO_MOVE: {
                 value: 100,
-                writable: true
+                writable: false
             },
             CURRENT_UPDATE_PROGRESS: {
                 value: 0,
+                writable: true
+            },
+            IS_FALLING: {
+                value: true,
                 writable: true
             }
         })
@@ -106,8 +110,7 @@ class BitBase {
         let dirMoved = {x, y, didMove: false}
 
         if(this.xVel > 0) {
-            //mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE
-            if(true) {
+            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
                 mods.CURRENT_UPDATE_PROGRESS = 0;
 
                 this.modifiers = mods
@@ -179,10 +182,14 @@ class BitBase {
         let dirMoved = {x, y, didMove: false}
         let bitBelow = this.GetBit(x, y + 1)
 
-        if(y < 99 && bitBelow) {
-            let bitRight = this.GetBit(x + 3, y + 1)
-            if(!bitRight) {
-                this.AddVelocity(3, 0)
+        if(y < 99 && !mods.IS_FALLING && bitBelow) {
+            if(x + 3 <= 99) {
+                let bitRight = this.GetBit(x + 3, y + 1)
+                if(!bitRight) {
+                    if(this.xVel == 0) {
+                        this.AddVelocity(3, 0)
+                    }
+                }   
             }
         }
     }

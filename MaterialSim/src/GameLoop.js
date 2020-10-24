@@ -8,7 +8,7 @@ let bitManager
 
 let mouseX, mouseY
 
-let shouldMouseDragSpawn = false;
+let shouldMouseDragSpawn = true;
 
 function init() {
     for(let x = 0; x < 100; x++) {
@@ -20,14 +20,14 @@ function init() {
     bitManager = new BitManager(grid, ctx)
     gameLoop()
 
-    let modifiers = {
-        HAS_GRAVITY: true,
-        WEIGHT: 50,
-        COLOR: '#FFC300',
-        IS_SAND: true
-    }
-    let testBit = new BitBase(0, 0, modifiers)
-    bitManager.SpawnBit(1, 1, testBit)
+    // let modifiers = {
+    //     HAS_GRAVITY: true,
+    //     WEIGHT: 50,
+    //     COLOR: '#FFC300',
+    //     IS_SAND: true
+    // }
+    // let testBit = new BitBase(0, 0, modifiers)
+    // bitManager.SpawnBit(1, 1, testBit)
 }
 
 function gameLoop() {
@@ -47,7 +47,8 @@ window.addEventListener('mousemove', event => {
         let modifiers = {
             HAS_GRAVITY: true,
             WEIGHT: 75,
-            COLOR: '#FFC300'
+            COLOR: '#FFC300',
+            IS_SAND: true
         }
         let testBit = new BitBase(0, 0, modifiers)
         bitManager.SpawnBit(mouseX, mouseY, testBit)
