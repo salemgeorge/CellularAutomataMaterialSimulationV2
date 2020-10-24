@@ -50,8 +50,8 @@ window.addEventListener('mousemove', event => {
             COLOR: '#FFC300',
             IS_SAND: true
         }
-        let testBit = new BitBase(0, 0, modifiers)
-        bitManager.SpawnBit(mouseX, mouseY, testBit)
+        let newBit = new BitBase(0, 0, modifiers)
+        bitManager.SpawnBit(mouseX, mouseY, newBit)
     }
 })
 

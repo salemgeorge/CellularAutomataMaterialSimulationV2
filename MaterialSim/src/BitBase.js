@@ -179,7 +179,6 @@ class BitBase {
         let mods = this.modifiers
         let x = this.x
         let y = this.y
-        let dirMoved = {x, y, didMove: false}
         let bitBelow = this.GetBit(x, y + 1)
 
         if(y < 99 && !mods.IS_FALLING && bitBelow) {
