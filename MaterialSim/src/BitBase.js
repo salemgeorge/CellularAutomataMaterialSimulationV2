@@ -106,8 +106,7 @@ class BitBase {
         let dirMoved = {x, y, didMove: false}
 
         if(this.xVel > 0) {
-            //mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE
-            if(true) {
+            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
                 mods.CURRENT_UPDATE_PROGRESS = 0;
 
                 this.modifiers = mods
@@ -176,12 +175,13 @@ class BitBase {
         let mods = this.modifiers
         let x = this.x
         let y = this.y
-        let dirMoved = {x, y, didMove: false}
         let bitBelow = this.GetBit(x, y + 1)
+
+        console.log(y, bitBelow)
 
         if(y < 99 && bitBelow) {
             let bitRight = this.GetBit(x + 3, y + 1)
-            if(!bitRight) {
+            if(!bitRight && bitRight != undefined) {
                 this.AddVelocity(3, 0)
             }
         }

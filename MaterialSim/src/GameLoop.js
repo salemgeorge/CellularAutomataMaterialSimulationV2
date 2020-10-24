@@ -8,7 +8,7 @@ let bitManager
 
 let mouseX, mouseY
 
-let shouldMouseDragSpawn = false;
+let shouldMouseDragSpawn = true;
 
 function init() {
     for(let x = 0; x < 100; x++) {
@@ -49,8 +49,8 @@ window.addEventListener('mousemove', event => {
             WEIGHT: 75,
             COLOR: '#FFC300'
         }
-        let testBit = new BitBase(0, 0, modifiers)
-        bitManager.SpawnBit(mouseX, mouseY, testBit)
+        let newBit = new BitBase(0, 0, modifiers)
+        bitManager.SpawnBit(mouseX, mouseY, newBit)
     }
 })
 
