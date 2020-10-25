@@ -13,24 +13,25 @@ class BitManager {
                 if(!grid[x][y]) continue;
                 
                 let bitToUpdate = grid[x][y]
-                let bitPos = {x, y, didMove: null}
-                let bitBelow = this.GetBit(x, y + 1) 
+                let bitPos = {x, y, didMove: false}
+                let bitBelow = this.GetBit(x, y + 1)
 
-                bitPos = grid[bitPos.x][bitPos.y].ApplyVelocity()
+                if(bitToUpdate.modifiers.IS_SAND) {
+                    if(grid[bitPos.x][bitPos.y]) {
+                        bitPos = grid[bitPos.x][bitPos.y].HandleSlopePhysics(2)
+                    }
 
+                    if(bitPos.didMove) grid[x][y] = null
+                }
                 if(bitToUpdate.modifiers.HAS_GRAVITY) {
                     if(!bitBelow && grid[bitPos.x][bitPos.y]) {
                         bitPos = grid[bitPos.x][bitPos.y].ApplyGravity()
                         grid[bitPos.x][bitPos.y].modifiers.IS_FALLING = true
                         if(bitPos.didMove) grid[x][y] = null
-                    } else {
+                    } else if(bitBelow) {
                         if(grid[bitPos.x][bitPos.y])
                             grid[bitPos.x][bitPos.y].modifiers.IS_FALLING = false
                     }
-                }
-                if(bitToUpdate.modifiers.IS_SAND) {
-                    if(grid[bitPos.x][bitPos.y])
-                        grid[bitPos.x][bitPos.y].HandleSandPhysics()
                 }
 
                 if(grid[bitPos.x][bitPos.y]) {

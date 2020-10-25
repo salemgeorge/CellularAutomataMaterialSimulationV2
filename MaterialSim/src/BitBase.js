@@ -4,9 +4,6 @@ class BitBase {
     modifiers;
     direction;
 
-    xVel = 0;
-    yVel = 0;
-
     constructor(x, y, modifiers) {
         this.x = x;
         this.y = y;
@@ -61,7 +58,7 @@ class BitBase {
         this.x = x;
         this.y = y;
 
-        return {x, y, didMove: false}
+        return {x, y, didMove: true}
     }
 
     DrawSelf(ctx) {
@@ -75,7 +72,7 @@ class BitBase {
         if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
 
             let canMove = this.y < 99
-            if(canMove && this.yVel == 0) {
+            if(canMove) {
                 mods.CURRENT_UPDATE_PROGRESS = 0
 
                 this.MoveSelf(this.direction.DOWN)
@@ -103,93 +100,52 @@ class BitBase {
         return {x, y, didMove}
     }
 
-    ApplyVelocity() {
-        let mods = this.modifiers
-        let x = this.x
-        let y = this.y
-        let dirMoved = {x, y, didMove: false}
-
-        if(this.xVel > 0) {
-            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
-                mods.CURRENT_UPDATE_PROGRESS = 0;
-
-                this.modifiers = mods
-
-                if(x < 99 && !this.GetBit(x + 1, y)) {
-                    this.MoveSelf(this.direction.RIGHT)
-                    this.xVel--;
-                    dirMoved.x++;
-
-                    console.log('applied vel')
-                }
-            }
-        } else if(this.xVel < 0) {
-            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
-                mods.CURRENT_UPDATE_PROGRESS = 0;
-
-                this.modifiers = mods
-
-                if(x > 0 && this.GetBit(x - 1, y) == null) {
-                    this.MoveSelf(this.direction.LEFT)
-                    this.xVel++;
-                    dirMoved.x--;
-                }
-            }
-        }
-
-        if(this.yVel < 0) {
-            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
-                mods.CURRENT_UPDATE_PROGRESS = 0;
-
-                this.modifiers = mods
-
-                if(y > 0 && this.GetBit(x, y - 1) == null) {
-                    this.MoveSelf(this.direction.UP)
-                    this.yVel++;
-                    dirMoved.y--;
-                }
-            }
-        } else if(this.yVel > 0) {
-            if(mods.CURRENT_UPDATE_PROGRESS >= mods.UPDATE_PROGRESS_TO_MOVE) {
-                mods.CURRENT_UPDATE_PROGRESS = 0;
-
-                this.modifiers = mods
-
-                if(y < 99 && this.GetBit(x, y + 1) == null) {
-                    this.MoveSelf(this.direction.DOWN)
-                    this.yVel--;
-                    dirMoved.y++;
-                }
-            }
-        }
-
-        return dirMoved;
-    }
-
-    AddVelocity(xAmount, yAmount) {
-        this.xVel += xAmount;
-        this.yVel += yAmount;
-    }
-
     GetBit(x, y) {
         return grid[x][y]
     }
 
-    HandleSandPhysics() {
+    HandleSlopePhysics(xSlope) {
         let mods = this.modifiers
         let x = this.x
         let y = this.y
         let bitBelow = this.GetBit(x, y + 1)
+        let dirMoved = {x, y, didMove: false}
 
-        if(y < 99 && !mods.IS_FALLING && bitBelow) {
-            if(x + 3 <= 99) {
-                let bitRight = this.GetBit(x + 3, y + 1)
-                if(!bitRight) {
-                    if(this.xVel == 0) {
-                        this.AddVelocity(3, 0)
+        if(y + 1 <= 99 && bitBelow) {
+            let bitFarRight = this.GetBit(x + xSlope, y + 1)
+            let bitFarLeft = this.GetBit(x - xSlope, y + 1)
+
+            if(bitFarLeft == null && bitFarRight) {
+                if(!this.GetBit(x - 1, y)) {
+                    this.MoveSelf(this.direction.LEFT)
+                    dirMoved.x--;
+                    dirMoved.didMove = true
+                }
+            } else if(bitFarLeft && bitFarRight == null) {
+                if(!this.GetBit(x + 1, y)) {
+                    this.MoveSelf(this.direction.RIGHT)
+                    dirMoved.x++;
+                    dirMoved.didMove = true
+                }
+            } else if(bitFarLeft == null && bitFarRight == null) {
+                let randDir = Math.random()
+
+                if(randDir < 0.5) {
+                    if(!this.GetBit(x - 1, y)) {
+                        this.MoveSelf(this.direction.LEFT)
+                        dirMoved.x--;
+                        dirMoved.didMove = true
                     }
-                }   
+                } else {
+                    if(!this.GetBit(x + 1, y)) {
+                        this.MoveSelf(this.direction.RIGHT)
+                        dirMoved.x++;
+                        dirMoved.didMove = true
+                    }
+                }
             }
+            return dirMoved;
         }
+        return dirMoved;
     }
 }
